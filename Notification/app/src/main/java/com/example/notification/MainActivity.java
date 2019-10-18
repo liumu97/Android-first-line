@@ -2,6 +2,7 @@ package com.example.notification;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
+import android.app.NotificationChannelGroup;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
@@ -27,7 +28,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Intent intent = new Intent(this,NotificationActiviy.class);
                 PendingIntent pi = PendingIntent.getActivity(this,0,intent,0);
                 NotificationManager manager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-                Notification notification = new NotificationCompat.Builder(this, "channel")
+                String groupId = "group_001";
+                NotificationChannelGroup group = new NotificationChannelGroup(groupId,"通知组");
+                manager.createNotificationChannelGroup(group);
+                String channelId = "channel_001";
+                NotificationChannel adChannel = new NotificationChannel(channelId,"通知测试",NotificationManager.IMPORTANCE_DEFAULT);
+                adChannel.setDescription("通知测试");
+                adChannel.setGroup(groupId);
+                manager.createNotificationChannel(adChannel);
+                Notification notification = new NotificationCompat.Builder(this, channelId)
                         .setContentTitle("This is content title")
                         .setContentText("This is content text")
                         .setWhen(System.currentTimeMillis())
@@ -35,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         .setContentIntent(pi)
                         .setAutoCancel(true)
                         .build();
-                manager.notify(3,notification);
+                manager.notify(5,notification);
                 break;
             default:
                 break;
